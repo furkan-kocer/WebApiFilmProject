@@ -1,7 +1,6 @@
 ﻿using FilmProject.Api.ApiReturnControls;
 using FilmProject.DataAccess.DataTransferObjects.Film;
 using FilmProject.Services.Businesses.FilmService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
