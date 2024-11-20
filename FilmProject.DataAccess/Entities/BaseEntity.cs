@@ -7,8 +7,8 @@ namespace FilmProject.DataAccess.Entities
     {
         [BsonId]
         public ObjectId Id { get; init; }
-        public DateTime createdDate { get; init; }
-        public DateTime updatedDate { get; init; }
+        public DateTime createdDate { get; set; }
+        public DateTime updatedDate { get; set; }
         public string status { get; set; }
     }
 }

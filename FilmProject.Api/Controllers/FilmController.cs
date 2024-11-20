@@ -31,7 +31,7 @@ namespace FilmProject.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFilm(FilmRequest filmRequest)
         {
-            if (filmRequest == null || filmRequest.filmName == string.Empty)
+            if (filmRequest == null || filmRequest.FilmName == string.Empty)
             {
                 var problemDetails = CustomProblemDetailsFactory.CreateProblemDetails(
                 httpContext: HttpContext,

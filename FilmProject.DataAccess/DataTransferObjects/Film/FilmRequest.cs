@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace FilmProject.DataAccess.DataTransferObjects.Film
 {
-    public record FilmRequest(string filmName, float price);
+    public record FilmRequest(string FilmName, float Price);
     
 }

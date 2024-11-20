@@ -2,6 +2,7 @@
 using FilmProject.DataAccess.DataTransferObjects.Film;
 using FilmProject.DataAccess.Entities;
 using FilmProject.DataAccess.Helpers;
+using Mapster;
 
 namespace FilmProject.Services.Businesses.FilmService
 {
@@ -15,26 +16,18 @@ namespace FilmProject.Services.Businesses.FilmService
 
         public async Task<GenericResponseBase<string>> CreateFilm(FilmRequest filmRequest)
         {
-            var film = new Film
-            {
-                filmName = filmRequest.filmName,
-                price = filmRequest.price,
-                status = "yayında",
-                createdDate = DateTime.Now,
-                updatedDate = DateTime.Now,
-                filmCode = HelperService.GenerateUniqueCode(filmRequest.filmName)
-            };
+            var film = filmRequest.Adapt<Film>();
+            film.updatedDate = DateTime.Now;
+            film.createdDate = DateTime.Now;
+            film.status = "live";
+            film.FilmCode = HelperService.GenerateUniqueCode(filmRequest.FilmName);
             await _filmCollectionRepository.CreateFilmAsync(film);
             return GenericResponseBase<string>.Success();
         }
         public async Task<GenericResponseBase<string>> UpdateFilmByCode(FilmRequest filmRequest, string filmCode)
         {
-            var film = new Film
-            {
-                filmName = filmRequest.filmName,
-                price = filmRequest.price,
-                updatedDate = DateTime.Now
-            };
+            var film = filmRequest.Adapt<Film>();
+            film.updatedDate = DateTime.Now;
             await _filmCollectionRepository.UpdateOneFilmByCode(film, filmCode);
             return GenericResponseBase<string>.Success();
         }
@@ -51,12 +44,7 @@ namespace FilmProject.Services.Businesses.FilmService
         public async Task<GenericResponseBase<List<FilmResponse>>> GetAllFilmsAsync()
         {
             var films = await _filmCollectionRepository.GetFilmsAsync();
-            var filmResponses = new List<FilmResponse>();
-            foreach (var film in films)
-            {
-                var filmResponse = new FilmResponse(filmName: film.filmName, price: film.price, filmCode: film.filmCode);
-                filmResponses.Add(filmResponse);
-            }
+            var filmResponses = films.Adapt<List<FilmResponse>>();
             return GenericResponseBase<List<FilmResponse>>.Success(filmResponses);
         }
 
@@ -65,9 +53,9 @@ namespace FilmProject.Services.Businesses.FilmService
             var film = await _filmCollectionRepository.GetSpecificFilm(filmCode);
             if (film == null)
             {
-                return GenericResponseBase<FilmResponse>.NotFound("There is no film founded with " + filmCode + " code value.");
+                return GenericResponseBase<FilmResponse>.NotFound("There is no film founded with value code:" + filmCode);
             }
-            var filmResponse = new FilmResponse(filmName: film.filmName, price: film.price, filmCode: film.filmCode);
+            var filmResponse = film.Adapt<FilmResponse>();
             return GenericResponseBase<FilmResponse>.Success(filmResponse);
         }
     }

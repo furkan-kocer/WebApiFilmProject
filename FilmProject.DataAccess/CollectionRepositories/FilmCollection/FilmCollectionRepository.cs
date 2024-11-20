@@ -16,9 +16,9 @@ namespace FilmProject.DataAccess.CollectionRepositories.FilmCollection
         }
         public async Task UpdateOneFilmByCode(Film film, string filmCode)
         {
-            var filter = Builders<Film>.Filter.Eq(f => f.filmCode, filmCode);
-            var update = Builders<Film>.Update.Set(f => f.filmName, film.filmName)
-                                              .Set(f => f.price, film.price)
+            var filter = Builders<Film>.Filter.Eq(f => f.FilmCode, filmCode);
+            var update = Builders<Film>.Update.Set(f => f.FilmName, film.FilmName)
+                                              .Set(f => f.Price, film.Price)
                                               .Set(f => f.updatedDate, film.updatedDate);
             await _dbService._filmCollection.UpdateOneAsync(filter, update);
         }
@@ -30,7 +30,7 @@ namespace FilmProject.DataAccess.CollectionRepositories.FilmCollection
 
         public async Task DeleteFilmAsync(string filmCode)
         {
-            await _dbService._filmCollection.DeleteOneAsync(f => f.filmCode == filmCode);
+            await _dbService._filmCollection.DeleteOneAsync(f => f.FilmCode == filmCode);
         }
 
         public async Task<List<Film>> GetFilmsAsync()
@@ -41,7 +41,7 @@ namespace FilmProject.DataAccess.CollectionRepositories.FilmCollection
 
         public async Task<Film> GetSpecificFilm(string filmCode)
         {
-            var film = await _dbService._filmCollection.Find(f => f.filmCode == filmCode).FirstOrDefaultAsync();
+            var film = await _dbService._filmCollection.Find(f => f.FilmCode == filmCode).FirstOrDefaultAsync();
             return film;
         }
     }
