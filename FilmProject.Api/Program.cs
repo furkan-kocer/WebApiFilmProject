@@ -1,7 +1,7 @@
 using FilmProject.DataAccess;
 using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using Serilog;
-
+using FilmProject.Services.Businesses.Film;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
@@ -13,6 +13,7 @@ builder.Host.UseSerilog();
 // Add services to the container.
 builder.Services.AddSingleton<MongoDBService>();
 builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>();
+builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
