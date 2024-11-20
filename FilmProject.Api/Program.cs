@@ -1,7 +1,13 @@
+using FilmProject.DataAccess;
+using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure the mongoDBSettings
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
 // Add services to the container.
-
+builder.Services.AddSingleton<MongoDBService>();
+builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
