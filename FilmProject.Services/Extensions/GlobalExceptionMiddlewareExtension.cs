@@ -20,7 +20,8 @@ namespace FilmProject.Services.Extensions
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if(contextFeature is not null)
                     {
-                        Log.Logger.Error("Something went wrong: {contextFeature.Error}",contextFeature.Error);
+                        var contextError = contextFeature.Error;
+                        Log.Logger.Error("Something went wrong: {contextError}", contextError);
 
                         await context.Response.WriteAsync(new ErrorDetails
                         {
