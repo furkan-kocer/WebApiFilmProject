@@ -7,7 +7,7 @@ namespace FilmProject.Services.Businesses.FilmService
 {
     public class FilmService : IFilmService
     {
-       private readonly IFilmCollectionRepository _filmCollectionRepository;
+        private readonly IFilmCollectionRepository _filmCollectionRepository;
         public FilmService(IFilmCollectionRepository filmCollectionService)
         {
             _filmCollectionRepository = filmCollectionService;
@@ -15,42 +15,28 @@ namespace FilmProject.Services.Businesses.FilmService
 
         public async Task<GenericResponseBase<string>> CreateFilm(FilmRequest filmRequest)
         {
-            try
+            var film = new Film
             {
-                var film = new Film
-                {
-                    filmName = filmRequest.filmName,
-                    price = filmRequest.price,
-                    status = "yayında",
-                    createdDate = DateTime.Now,
-                    updatedDate = DateTime.Now,
-                    filmCode = HelperService.GenerateUniqueCode(filmRequest.filmName)
-                };
-                await _filmCollectionRepository.CreateFilmAsync(film);
-                return GenericResponseBase<string>.Success();
-            }
-            catch (Exception ex)
-            {
-                return GenericResponseBase<string>.Error(ex.Message);
-            }
+                filmName = filmRequest.filmName,
+                price = filmRequest.price,
+                status = "yayında",
+                createdDate = DateTime.Now,
+                updatedDate = DateTime.Now,
+                filmCode = HelperService.GenerateUniqueCode(filmRequest.filmName)
+            };
+            await _filmCollectionRepository.CreateFilmAsync(film);
+            return GenericResponseBase<string>.Success();
         }
         public async Task<GenericResponseBase<string>> UpdateFilmByCode(FilmRequest filmRequest, string filmCode)
         {
-            try
+            var film = new Film
             {
-                var film = new Film
-                {
-                    filmName = filmRequest.filmName,
-                    price = filmRequest.price,
-                    updatedDate = DateTime.Now
-                };
-                await _filmCollectionRepository.UpdateOneFilmByCode(film, filmCode);
-                return GenericResponseBase<string>.Success();
-            }
-            catch (Exception ex)
-            {
-                return GenericResponseBase<string>.Error(ex.Message);
-            }
+                filmName = filmRequest.filmName,
+                price = filmRequest.price,
+                updatedDate = DateTime.Now
+            };
+            await _filmCollectionRepository.UpdateOneFilmByCode(film, filmCode);
+            return GenericResponseBase<string>.Success();
         }
         public async Task DeleteAllFilms()
         {
@@ -64,43 +50,25 @@ namespace FilmProject.Services.Businesses.FilmService
 
         public async Task<GenericResponseBase<List<FilmResponse>>> GetAllFilmsAsync()
         {
-            try
+            var films = await _filmCollectionRepository.GetFilmsAsync();
+            var filmResponses = new List<FilmResponse>();
+            foreach (var film in films)
             {
-                var films = await _filmCollectionRepository.GetFilmsAsync();
-                //if (response == null || !response.Any())
-                //{
-                //    //return GenericResponseBase<List<FilmResponse>>.NotFound("No films found.");
-                //}
-                var filmResponses = new List<FilmResponse>();
-                foreach (var film in films)
-                {
-                    var filmResponse = new FilmResponse(filmName: film.filmName, price: film.price, filmCode: film.filmCode);
-                    filmResponses.Add(filmResponse);
-                }
-                return GenericResponseBase<List<FilmResponse>>.Success(filmResponses);
+                var filmResponse = new FilmResponse(filmName: film.filmName, price: film.price, filmCode: film.filmCode);
+                filmResponses.Add(filmResponse);
             }
-            catch (Exception ex)
-            {
-                return GenericResponseBase<List<FilmResponse>>.Error(ex.Message);
-            }
+            return GenericResponseBase<List<FilmResponse>>.Success(filmResponses);
         }
 
         public async Task<GenericResponseBase<FilmResponse>> GetSpecificFilmAsync(string filmCode)
         {
-            try
+            var film = await _filmCollectionRepository.GetSpecificFilm(filmCode);
+            if (film == null)
             {
-                var film = await _filmCollectionRepository.GetSpecificFilm(filmCode);
-                if(film == null)
-                {
-                    return GenericResponseBase<FilmResponse>.NotFound("There is no film founded with " + filmCode + " code value.");
-                }
-                var filmResponse = new FilmResponse(filmName: film.filmName, price:film.price, filmCode: film.filmCode);
-                return GenericResponseBase<FilmResponse>.Success(filmResponse);
+                return GenericResponseBase<FilmResponse>.NotFound("There is no film founded with " + filmCode + " code value.");
             }
-            catch (Exception ex)
-            {
-                return GenericResponseBase<FilmResponse>.Error(ex.Message);
-            }
+            var filmResponse = new FilmResponse(filmName: film.filmName, price: film.price, filmCode: film.filmCode);
+            return GenericResponseBase<FilmResponse>.Success(filmResponse);
         }
     }
 }

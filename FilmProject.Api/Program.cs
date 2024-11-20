@@ -2,6 +2,8 @@ using FilmProject.DataAccess;
 using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using Serilog;
 using FilmProject.Services.Businesses.FilmService;
+using FilmProject.Services.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
@@ -27,6 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandler();
 
 app.UseSerilogRequestLogging();
 
