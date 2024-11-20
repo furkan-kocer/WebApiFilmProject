@@ -1,11 +1,6 @@
 ﻿using FilmProject.DataAccess.DataTransferObjects.Film;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FilmProject.Services.Businesses.Film
+namespace FilmProject.Services.Businesses.FilmService
 {
     public interface IFilmService
     {
