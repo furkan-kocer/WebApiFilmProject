@@ -1,7 +1,6 @@
 using FilmProject.DataAccess;
 using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using Serilog;
-using FilmProject.Services.Businesses.Film;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
