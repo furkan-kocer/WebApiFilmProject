@@ -3,6 +3,9 @@ using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using Serilog;
 using FilmProject.Services.Businesses.FilmService;
 using FilmProject.Services.Extensions;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using FilmProject.Services.Validations.FluentValidation.FilmValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,8 @@ builder.Host.UseSerilog();
 builder.Services.AddSingleton<MongoDBService>();
 builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>();
 builder.Services.AddScoped<IFilmService, FilmService>();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<FilmRequestDtoValidator>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
