@@ -31,19 +31,6 @@ namespace FilmProject.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFilm(FilmRequest filmRequest)
         {
-            if (filmRequest == null)
-            {
-                var problemDetails = CustomProblemDetailsFactory.CreateProblemDetails(
-                httpContext: HttpContext,
-                type: "Bad Request",
-                title: "Null or Empty.",
-                detail: "Please filled all the required fields.",
-                statusCode: StatusCodes.Status400BadRequest);
-                Log.Logger.Error("Something went wrong in the {CreateFilm} method." +
-                "The {filmRequest} or filmname is {title} {detail}",
-                 nameof(CreateFilm), nameof(filmRequest), problemDetails.Title, problemDetails.Detail);
-                return BadRequest(problemDetails);
-            }
             var response = await _filmService.CreateFilm(filmRequest);
             return Created("", response);
         }

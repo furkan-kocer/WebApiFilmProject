@@ -6,6 +6,7 @@ using FilmProject.Services.Extensions;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using FilmProject.Services.Validations.FluentValidation.FilmValidation;
+using FilmProject.Services.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,8 @@ builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>()
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<FilmRequestDtoValidator>();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>()).
+    ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
