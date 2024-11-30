@@ -35,7 +35,11 @@ namespace Identity.Api.Controllers
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(tokenHandler.WriteToken(token));
+            var response = tokenHandler.WriteToken(token);
+            return Ok(new TokenGenerationResponse
+            {
+                Token = response
+            });
         }
     }
 }
