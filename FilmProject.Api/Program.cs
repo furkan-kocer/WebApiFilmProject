@@ -1,7 +1,5 @@
 using FilmProject.DataAccess;
-using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using Serilog;
-using FilmProject.Services.Businesses.FilmService;
 using FilmProject.Services.Extensions;
 using FluentValidation.AspNetCore;
 using FluentValidation;
@@ -23,16 +21,14 @@ builder.Services.Configure<JWTSettings>(jwtSection);
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddJsonFile("appsettings.Development.json", optional: true).Build();
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
 builder.Host.UseSerilog();
-// Add services to the container.
-builder.Services.AddSingleton<MongoDBService>();
-builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>();
-builder.Services.AddScoped<IFilmService, FilmService>();
+builder.Services.RegisterDependencyService();
+//FluentValidation Implementation
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<FilmRequestDtoValidator>();
-//JWT
+//JWT Service Registration
 builder.Services.RegisterJWTService(Options.Create(jwtSettings));
 builder.Services.AddAuthorization();
-//Implfy ValidationFilter and Api Behavior
+//Implement ValidationFilter and Api Behavior
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>()).
     ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

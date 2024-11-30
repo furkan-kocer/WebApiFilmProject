@@ -15,6 +15,9 @@ namespace Identity.Api.JWTDto
         [NotNull]
         [MaxLength(100)]
         public string email { get; set; }
+
+        [Required]
+        [EnumDataType(typeof(Roles))]
         public Roles Role { get; set; }
 
         //public CustomClaims customclaims { get; set; }

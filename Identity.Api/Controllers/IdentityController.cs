@@ -16,6 +16,10 @@ namespace Identity.Api.Controllers
         [HttpPost("token")]
         public IActionResult GenerateToken([FromBody]TokenGenerationRequest request,IOptions<JWTSettings> config)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(config.Value.Key);
 
@@ -25,6 +29,7 @@ namespace Identity.Api.Controllers
                 new(JwtRegisteredClaimNames.Sub, request.username),
                 new(JwtRegisteredClaimNames.Email, request.email),
                 new("userid", request.userID.ToString()),
+                new("role",request.Role.ToString())
             };
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -38,7 +43,8 @@ namespace Identity.Api.Controllers
             var response = tokenHandler.WriteToken(token);
             return Ok(new TokenGenerationResponse
             {
-                Token = response
+                Token = response,
+                TokenExpireDate = tokenDescriptor.Expires.Value
             });
         }
     }
