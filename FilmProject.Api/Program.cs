@@ -7,11 +7,18 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using FilmProject.Services.Validations.FluentValidation.FilmValidation;
 using FilmProject.Services.Filters;
+using FilmProject.Api.JWTConfigure;
+using FilmProject.Api.Extensions;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
+//Configure the JwtSettings
+var jwtSection = builder.Configuration.GetSection("JwtSettings");
+var jwtSettings = jwtSection.Get<JWTSettings>();
+builder.Services.Configure<JWTSettings>(jwtSection);
 //Logging Configuration
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddJsonFile("appsettings.Development.json", optional: true).Build();
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
@@ -22,6 +29,10 @@ builder.Services.AddScoped<IFilmCollectionRepository,FilmCollectionRepository>()
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<FilmRequestDtoValidator>();
+//JWT
+builder.Services.RegisterJWTService(Options.Create(jwtSettings));
+builder.Services.AddAuthorization();
+//Implfy ValidationFilter and Api Behavior
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>()).
     ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,6 +54,7 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
