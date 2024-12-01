@@ -34,7 +34,7 @@ namespace Identity.Api.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.Add(TimeSpan.FromHours(config.Value.Duration)),
+                Expires = DateTime.UtcNow.Add(TimeSpan.FromHours(config.Value.Duration)),
                 Issuer = config.Value.Issuer,
                 Audience = config.Value.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

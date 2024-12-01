@@ -6,7 +6,8 @@ namespace FilmProject.Services
     {
         public bool result { get; set; }
         public T? data { get; set; }
-        public string? errorDetail { get; set; }
+        public string? errorDetail { get; set; } 
+        public IEnumerable<string> errors { get; set; } = Enumerable.Empty<string>();
         public static GenericResponseBase<T> Error(string error)
         {
             Log.Logger.Information("Something went wrong.{error}", error);
@@ -14,6 +15,15 @@ namespace FilmProject.Services
             {
                 result = false,
                 errorDetail = error
+            };
+        }
+        public static GenericResponseBase<T> ErrorList(IEnumerable<string> error)
+        {
+            Log.Logger.Information("Something went wrong.{error}", error);
+            return new GenericResponseBase<T>
+            {
+                result = false,
+                errors = error
             };
         }
         public static GenericResponseBase<T> NotFound(string message)

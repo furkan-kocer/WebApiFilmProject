@@ -17,9 +17,9 @@ namespace FilmProject.Services.Businesses.FilmService
         public async Task<GenericResponseBase<string>> CreateFilm(FilmRequest filmRequest)
         {
             var film = filmRequest.Adapt<Film>();
-            film.updatedDate = DateTime.Now;
-            film.createdDate = DateTime.Now;
-            film.status = "live";
+            film.updatedDate = DateTime.UtcNow;
+            film.createdDate = DateTime.UtcNow;
+            film.status = true;
             film.FilmCode = HelperService.GenerateUniqueCode(filmRequest.FilmName);
             await _filmCollectionRepository.CreateFilmAsync(film);
             return GenericResponseBase<string>.Success();
@@ -27,7 +27,7 @@ namespace FilmProject.Services.Businesses.FilmService
         public async Task<GenericResponseBase<string>> UpdateFilmByCode(FilmRequest filmRequest, string filmCode)
         {
             var film = filmRequest.Adapt<Film>();
-            film.updatedDate = DateTime.Now;
+            film.updatedDate = DateTime.UtcNow;
             await _filmCollectionRepository.UpdateOneFilmByCode(film, filmCode);
             return GenericResponseBase<string>.Success();
         }

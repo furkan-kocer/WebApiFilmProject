@@ -10,5 +10,6 @@
     {
         public string filmCollection { get; init; }
         public string filmCategoryCollection { get; init; }
+        public string userCollection { get; init; }
     }
 }
