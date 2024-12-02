@@ -23,6 +23,10 @@ namespace FilmProject.Services.Businesses.UserService
                 await _userRepository.RegisterUserAsync(user);
                 return GenericResponseBase<string>.Success("Successfully registered.");
             }
+            if(checkUserAvailable.Count == 1)
+            {
+                return GenericResponseBase<string>.Error(checkUserAvailable[0]);
+            }
             return GenericResponseBase<string>.ErrorList(checkUserAvailable);
         }
     }
