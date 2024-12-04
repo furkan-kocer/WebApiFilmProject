@@ -8,11 +8,14 @@ using FilmProject.Services.Filters;
 using FilmProject.Api.JWTConfigure;
 using FilmProject.Api.Extensions;
 using Microsoft.Extensions.Options;
+using FilmProject.Services.Businesses.ExternalApi;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
+builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("IdentityApiRequest"));
 //Configure the JwtSettings
 var jwtSection = builder.Configuration.GetSection("JwtSettings");
 var jwtSettings = jwtSection.Get<JWTSettings>();
@@ -26,8 +29,14 @@ builder.Services.RegisterDependencyService();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<FilmRequestDtoValidator>();
 //JWT Service Registration
-builder.Services.RegisterJWTService(Options.Create(jwtSettings));
-builder.Services.AddAuthorization();
+//TODO
+builder.Services.RegisterJWTService(Options.Create<JWTSettings>(jwtSettings));
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("NoUserRole", policy =>
+        policy.RequireAssertion(context =>
+            context.User.FindFirst(ClaimTypes.Role)?.Value != "User"));
+});
 //Implement ValidationFilter and Api Behavior
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>()).
     ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);

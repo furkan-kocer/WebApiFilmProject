@@ -3,6 +3,7 @@ using FilmProject.DataAccess;
 using FilmProject.Services.Businesses.FilmService;
 using FilmProject.DataAccess.CollectionRepositories.UserCollection;
 using FilmProject.Services.Businesses.UserService;
+using FilmProject.Services.Businesses.ExternalApi;
 
 namespace FilmProject.Api.Extensions
 {
@@ -12,6 +13,7 @@ namespace FilmProject.Api.Extensions
         {
             // Add services to the container.
             services.AddSingleton<MongoDBService>();
+            services.AddHttpClient<ExternalApiService>();
             services.AddScoped<IFilmCollectionRepository, FilmCollectionRepository>();
             services.AddScoped<IFilmService, FilmService>();
             services.AddScoped<IUserCollectionRepository, UserCollectionRepository>();

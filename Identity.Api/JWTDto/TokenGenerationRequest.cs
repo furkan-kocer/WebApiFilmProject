@@ -1,18 +1,14 @@
 ﻿using Identity.Api.Modal;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Identity.Api.JWTDto
 {
     public class TokenGenerationRequest
     {
-        public Guid userID { get; set; }
-        [Required]
-        [NotNull]
-        [MaxLength(100)]
-        public string username { get; set; }
-        [Required]
-        [NotNull]
+        public string userID { get; set; }
+        [MaxLength(20)]
+        public string? phoneNumber { get; set; }
         [MaxLength(100)]
         public string email { get; set; }
 

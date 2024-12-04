@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace FilmProject.DataAccess.DataTransferObjects.User
 {
-    public record UserLoginRequest(string UserName, string Password,string Email);
+    public record UserLoginRequest(string Field,string Password);
 }

@@ -1,6 +1,7 @@
 ﻿using FilmProject.Api.ApiReturnControls;
 using FilmProject.DataAccess.DataTransferObjects.Film;
 using FilmProject.Services.Businesses.FilmService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -29,6 +30,7 @@ namespace FilmProject.Api.Controllers
             return Ok(films);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateFilm(FilmRequest filmRequest)
         {
@@ -56,6 +58,7 @@ namespace FilmProject.Api.Controllers
             }
             return Ok(film);
         }
+        [Authorize(Policy = "NoUserRole")]
         [HttpPut("{filmCode}")]
         public async Task<IActionResult> UpdateFilmRecord([FromBody] FilmRequest filmRequest, [FromRoute] string filmCode)
         {
@@ -81,6 +84,7 @@ namespace FilmProject.Api.Controllers
             }
             return NoContent();
         }
+        [Authorize]
         [HttpDelete("{filmCode}")]
         public async Task<IActionResult> DeleteFilmByCode([FromRoute] string filmCode)
         {
@@ -102,6 +106,7 @@ namespace FilmProject.Api.Controllers
             await _filmService.DeleteSpecificFilmAsync(filmCode);
             return NoContent();
         }
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteAllFilms()
         {

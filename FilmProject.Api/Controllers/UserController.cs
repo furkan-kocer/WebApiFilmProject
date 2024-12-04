@@ -9,7 +9,7 @@ namespace FilmProject.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService) 
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -22,7 +22,18 @@ namespace FilmProject.Api.Controllers
             {
                 return BadRequest(registerResponse);
             }
-            return Created("",registerResponse);
+            return Created("", registerResponse);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginRequest userLoginRequest)
+        {
+            var loginResponse = await _userService.Login(userLoginRequest);
+
+            if (!loginResponse.result)
+            {
+                return BadRequest(loginResponse);
+            }
+            return Ok(loginResponse);
         }
     }
 }
