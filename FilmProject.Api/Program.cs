@@ -35,12 +35,12 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("NoUserRole", policy =>
         policy.RequireAssertion(context =>
-            context.User.FindFirst(ClaimTypes.Role)?.Value != "User"));
+            context.User.Identity.IsAuthenticated
+            && context.User.FindFirst(ClaimTypes.Role)?.Value != "User"));
 });
 //Implement ValidationFilter and Api Behavior
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>()).
     ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
