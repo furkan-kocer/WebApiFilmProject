@@ -1,6 +1,6 @@
 ﻿using FilmProject.Api.ApiReturnControls;
-using FilmProject.DataAccess.DataTransferObjects.Film;
-using FilmProject.Services.Businesses.FilmService;
+using FilmProject.Contracts.Abstractions.Businesses.FilmServiceAbs;
+using FilmProject.Contracts.DataTransferObjects.Film;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;

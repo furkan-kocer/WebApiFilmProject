@@ -1,7 +1,9 @@
-﻿using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
-using FilmProject.DataAccess.DataTransferObjects.Film;
+﻿using FilmProject.Contracts;
+using FilmProject.Contracts.Abstractions.Businesses.FilmServiceAbs;
+using FilmProject.Contracts.DataTransferObjects.Film;
+using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using FilmProject.DataAccess.Entities;
-using FilmProject.DataAccess.Helpers;
+using FilmProject.Services.Helpers;
 using Mapster;
 
 namespace FilmProject.Services.Businesses.FilmService

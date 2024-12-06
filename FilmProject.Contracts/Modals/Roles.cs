@@ -1,4 +1,4 @@
-﻿namespace FilmProject.DataAccess.Entities
+﻿namespace FilmProject.Contracts.Modals
 {
     public enum Roles
     {

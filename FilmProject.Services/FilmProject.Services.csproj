@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FilmProject.Contracts\FilmProject.Contracts.csproj" />
     <ProjectReference Include="..\FilmProject.DataAccess\FilmProject.DataAccess.csproj" />
   </ItemGroup>
 

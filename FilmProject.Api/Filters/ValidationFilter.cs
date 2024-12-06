@@ -1,10 +1,9 @@
-﻿using FilmProject.Api.FilterError;
-using FilmProject.DataAccess.FilterErrors;
+﻿using FilmProject.Contracts.FilterErrors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
 
-namespace FilmProject.Services.Filters
+namespace FilmProject.Api.Filters
 {
     public class ValidationFilter : IAsyncActionFilter
     {

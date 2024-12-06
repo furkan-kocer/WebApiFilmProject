@@ -1,8 +1,10 @@
-﻿using FilmProject.DataAccess.CollectionRepositories.UserCollection;
-using FilmProject.DataAccess.DataTransferObjects.User;
+﻿using FilmProject.Contracts;
+using FilmProject.Contracts.Abstractions.Businesses.UserServiceAbs;
+using FilmProject.Contracts.DataTransferObjects.User;
+using FilmProject.DataAccess.CollectionRepositories.UserCollection;
 using FilmProject.DataAccess.Entities;
-using FilmProject.DataAccess.Helpers;
 using FilmProject.Services.Businesses.ExternalApi;
+using FilmProject.Services.Helpers;
 using Mapster;
 using Microsoft.Extensions.Options;
 

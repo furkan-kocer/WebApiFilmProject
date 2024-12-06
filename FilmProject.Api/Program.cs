@@ -1,15 +1,14 @@
 using FilmProject.DataAccess;
 using Serilog;
-using FilmProject.Services.Extensions;
 using FluentValidation.AspNetCore;
 using FluentValidation;
-using FilmProject.Services.Validations.FluentValidation.FilmValidation;
-using FilmProject.Services.Filters;
 using FilmProject.Api.JWTConfigure;
 using FilmProject.Api.Extensions;
 using Microsoft.Extensions.Options;
 using FilmProject.Services.Businesses.ExternalApi;
 using System.Security.Claims;
+using FilmProject.Api.Validations.FluentValidation.FilmValidation;
+using FilmProject.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 

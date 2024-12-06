@@ -1,13 +1,12 @@
-﻿using FilmProject.DataAccess.DataTransferObjects.User;
-using FilmProject.DataAccess.Entities;
+﻿using FilmProject.DataAccess.Entities;
 
 namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
 {
     public interface IUserCollectionRepository
     {
-        Task<List<string>> CheckUserExist(UserRegisterRequest userRequest);
+        Task<List<string>> CheckUserExist(User user);
         Task RegisterUserAsync(User user);
-        Task<bool> IsLoginInputMatch(string field, UserLoginRequest userLoginRequest);
-        Task<UserLoginTokenResponse> GetMatchedUserAsync(string field, UserLoginRequest userLoginRequest);
+        Task<bool> IsLoginInputMatch(string field, User user);
+        Task<User> GetMatchedUserAsync(string field, User user);
     }
 }

@@ -1,6 +1,4 @@
-﻿using FilmProject.DataAccess.DataTransferObjects.User;
-using FilmProject.DataAccess.Entities;
-using FilmProject.DataAccess.Helpers;
+﻿using FilmProject.DataAccess.Entities;
 using MongoDB.Driver;
 namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
 {
@@ -12,42 +10,44 @@ namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
             _dbService = dbService;
         }
 
-        public async Task<List<string>> CheckUserExist(UserRegisterRequest userRequest)
+        public async Task<List<string>> CheckUserExist(User user)
         {
-            var conflictingUsers = await _dbService._userCollection.Find(u => u.Email == userRequest.Email || userRequest.PhoneNumber != null ?
-                                                            u.PhoneNumber == userRequest.PhoneNumber : false).ToListAsync();
+            var conflictingUsers = await _dbService._userCollection.Find(u => u.Email == user.Email || user.PhoneNumber != null ?
+                                                            u.PhoneNumber == user.PhoneNumber : false).ToListAsync();
             // Analyze conflicts and collect conflict types
             var conflicts = new List<string>();
             if (conflictingUsers.Any())
             {
-                foreach (var user in conflictingUsers)
+                foreach (var users in conflictingUsers)
                 {
-                    if (user.Email == userRequest.Email)
+                    if (user.Email == user.Email)
                         conflicts.Add("Email already exist.");
-                    if (user.PhoneNumber == userRequest.PhoneNumber && userRequest.PhoneNumber != null)
+                    if (user.PhoneNumber == user.PhoneNumber && user.PhoneNumber != null)
                         conflicts.Add("PhoneNumber already exist.");
                 }
             }
             return conflicts;
         }
 
-        public async Task<bool> IsLoginInputMatch(string field,UserLoginRequest userLoginRequest)
+        public async Task<bool> IsLoginInputMatch(string field,User user)
         {
-            var isMatching = await _dbService._userCollection.Find(u => (field == "Email" ? u.Email : u.PhoneNumber) == userLoginRequest.Field
-                && u.Password == userLoginRequest.Password).AnyAsync();
+            var fieldCondition = field == "Email" ? user.Email : user.PhoneNumber;
+            var isMatching = await _dbService._userCollection.Find(u => (field == "Email" ? u.Email : u.PhoneNumber) == fieldCondition
+                && u.Password == user.Password).AnyAsync();
             return isMatching;
         }
-        public async Task<UserLoginTokenResponse> GetMatchedUserAsync(string field, UserLoginRequest userLoginRequest)
+        public async Task<User> GetMatchedUserAsync(string field, User user)
         {
-            var projection = Builders<User>.Projection.Expression(user => new UserLoginTokenResponse
+            var fieldCondition = field == "Email" ? user.Email : user.PhoneNumber;
+            var projection = Builders<User>.Projection.Expression(user => new User
             {
-              userID = user.Id,
-              email = user.Email,
-              phoneNumber = user.PhoneNumber,
+              Id = user.Id,
+              Email = user.Email,
+              PhoneNumber = user.PhoneNumber,
               Role = user.Role
             });
-            var user = await _dbService._userCollection.Find(u => (field == "Email" ? u.Email : u.PhoneNumber) == userLoginRequest.Field
-                && u.Password == userLoginRequest.Password).Project(projection).FirstOrDefaultAsync();
+            var getMatchedUser = await _dbService._userCollection.Find(u => (field == "Email" ? u.Email : u.PhoneNumber) == fieldCondition
+                && u.Password == user.Password).Project(projection).FirstOrDefaultAsync();
             return user;
         }
         public async Task RegisterUserAsync(User user)

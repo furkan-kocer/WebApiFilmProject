@@ -1,9 +1,11 @@
 ﻿using FilmProject.DataAccess.CollectionRepositories.FilmCollection;
 using FilmProject.DataAccess;
-using FilmProject.Services.Businesses.FilmService;
 using FilmProject.DataAccess.CollectionRepositories.UserCollection;
-using FilmProject.Services.Businesses.UserService;
 using FilmProject.Services.Businesses.ExternalApi;
+using FilmProject.Contracts.Abstractions.Businesses.FilmServiceAbs;
+using FilmProject.Services.Businesses.FilmService;
+using FilmProject.Contracts.Abstractions.Businesses.UserServiceAbs;
+using FilmProject.Services.Businesses.UserService;
 
 namespace FilmProject.Api.Extensions
 {

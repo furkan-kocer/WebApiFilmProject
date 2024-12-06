@@ -1,5 +1,5 @@
-﻿using FilmProject.DataAccess.DataTransferObjects.User;
-using FilmProject.Services.Businesses.UserService;
+﻿using FilmProject.Contracts.Abstractions.Businesses.UserServiceAbs;
+using FilmProject.Contracts.DataTransferObjects.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilmProject.Api.Controllers
