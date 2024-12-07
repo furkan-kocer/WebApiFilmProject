@@ -15,11 +15,12 @@ namespace FilmProject.Api.Extensions
         {
             // Add services to the container.
             services.AddSingleton<MongoDBService>();
-            services.AddHttpClient<ExternalApiService>();
+            services.AddHttpClient<IExternalApiService,ExternalApiService>();
             services.AddScoped<IFilmCollectionRepository, FilmCollectionRepository>();
             services.AddScoped<IFilmService, FilmService>();
             services.AddScoped<IUserCollectionRepository, UserCollectionRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddMappingConfigurations();
             return services;
         }
     }

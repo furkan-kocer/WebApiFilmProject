@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.JWTDto
+﻿namespace Identity.Domain.JWTDto
 {
     public class TokenGenerationResponse
     {

@@ -1,8 +1,6 @@
-﻿using Identity.Api.Modal;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using Identity.Domain.Modal;
 using System.ComponentModel.DataAnnotations;
-namespace Identity.Api.JWTDto
+namespace Identity.Domain.JWTDto
 {
     public class TokenGenerationRequest
     {

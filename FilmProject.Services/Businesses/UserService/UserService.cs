@@ -13,9 +13,9 @@ namespace FilmProject.Services.Businesses.UserService
     public class UserService : IUserService
     {
         private readonly IUserCollectionRepository _userRepository;
-        private readonly ExternalApiService _externalApiService;
+        private readonly IExternalApiService _externalApiService;
         private readonly string _exampleApiEndpoint;
-        public UserService(IUserCollectionRepository userRepository, ExternalApiService externalApiService, IOptions<ExternalApiSettings> externalApiSettings)
+        public UserService(IUserCollectionRepository userRepository, IExternalApiService externalApiService, IOptions<ExternalApiSettings> externalApiSettings)
         {
             _userRepository = userRepository;
             _externalApiService = externalApiService;
@@ -24,17 +24,17 @@ namespace FilmProject.Services.Businesses.UserService
         //TODO
         public async Task<GenericResponseBase<string>> RegisterUser(UserRegisterRequest registerRequest)
         {
-            var checkUserAvailable = await _userRepository.CheckUserExist(registerRequest);
+            var user = registerRequest.Adapt<User>();
+            var checkUserAvailable = await _userRepository.CheckUserExist(user);
             if (!checkUserAvailable.Any())
             {
-                var user = registerRequest.Adapt<User>();
                 user.updatedDate = DateTime.UtcNow;
                 user.createdDate = DateTime.UtcNow;
                 user.status = true;
                 await _userRepository.RegisterUserAsync(user);
                 return GenericResponseBase<string>.Success("Successfully registered.");
             }
-            if(checkUserAvailable.Count == 1)
+            if (checkUserAvailable.Count == 1)
             {
                 return GenericResponseBase<string>.Error(checkUserAvailable[0]);
             }
@@ -43,12 +43,14 @@ namespace FilmProject.Services.Businesses.UserService
         public async Task<GenericResponseBase<UserLoginResponse>> Login(UserLoginRequest userLoginRequest)
         {
             var isEmail = UserHelper.CheckEmailorPhoneNum(userLoginRequest.Field);
-            var checkUserResponse = await _userRepository.IsLoginInputMatch(isEmail, userLoginRequest);
-            if(!checkUserResponse)
+            var user = userLoginRequest.Adapt<User>();
+            var checkUserResponse = await _userRepository.IsLoginInputMatch(isEmail, user);
+            if (!checkUserResponse)
                 return GenericResponseBase<UserLoginResponse>.Error($"Your {isEmail} or password incorrect.");
-            var getUserResponse = await _userRepository.GetMatchedUserAsync(isEmail, userLoginRequest);
+            var getUserResponse = await _userRepository.GetMatchedUserAsync(isEmail, user);
+            var userTokenResponse = getUserResponse.Adapt<UserLoginTokenResponse>();
             var endPoint = _exampleApiEndpoint + "/api/Identity/token";
-            var getTokenResponse = await _externalApiService.PostToExternalApiAsync<UserLoginResponse>(endPoint, getUserResponse);
+            var getTokenResponse = await _externalApiService.PostToExternalApiAsync<UserLoginResponse>(endPoint, userTokenResponse);
             return GenericResponseBase<UserLoginResponse>.Success(getTokenResponse);
 
         }

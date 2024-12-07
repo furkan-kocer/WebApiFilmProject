@@ -5,7 +5,7 @@ using FilmProject.Services.Helpers;
 
 namespace FilmProject.Services.Businesses.ExternalApi
 {
-    public class ExternalApiService
+    public class ExternalApiService : IExternalApiService
     {
         private readonly HttpClient _httpClient;
 
@@ -29,7 +29,7 @@ namespace FilmProject.Services.Businesses.ExternalApi
             throw new HttpRequestException("Error calling external API");
         }
 
-        public async Task<T> PostToExternalApiAsync<T>(string endpoint, object content)
+        public async Task<T> PostToExternalApiAsync<T>(string endpoint, object content) where T : class
         {
             Log.Logger.Information("{endpoint} call requested with the name of {methodname} method.", endpoint, nameof(PostToExternalApiAsync));
 

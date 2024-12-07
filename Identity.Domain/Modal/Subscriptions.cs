@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Modal
+﻿namespace Identity.Domain.Modal
 {
     public enum Subscriptions
     {
