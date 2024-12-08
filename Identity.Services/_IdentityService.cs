@@ -6,6 +6,6 @@ namespace Identity.Services
 {
     public interface _IdentityService
     {
-        TokenGenerationResponse TokenGenerate(TokenGenerationRequest request,IOptions<JWTSettings> config);
+        TokenGenerationResponse TokenGenerate(TokenGenerationRequest request);
     }
 }

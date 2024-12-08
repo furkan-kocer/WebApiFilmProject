@@ -1,8 +1,6 @@
 ﻿using Identity.Domain.JWTDto;
-using Identity.Domain.Modal;
 using Identity.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 namespace Identity.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -16,13 +14,13 @@ namespace Identity.Api.Controllers
         }
 
     [HttpPost("token")]
-        public IActionResult GenerateToken([FromBody]TokenGenerationRequest request,IOptions<JWTSettings> config)
+        public IActionResult GenerateToken([FromBody]TokenGenerationRequest request)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var tokenResponse = _identityService.TokenGenerate(request, config);
+            var tokenResponse = _identityService.TokenGenerate(request);
             return Ok(tokenResponse);
         }
     }

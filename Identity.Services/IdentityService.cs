@@ -10,10 +10,15 @@ namespace Identity.Services
 {
     public class IdentityService : _IdentityService
     {
-        public TokenGenerationResponse TokenGenerate(TokenGenerationRequest request, IOptions<JWTSettings> config)
+        private readonly IOptions<JWTSettings> _config;
+        public IdentityService(IOptions<JWTSettings> config) 
+        {
+            _config = config;
+        }    
+        public TokenGenerationResponse TokenGenerate(TokenGenerationRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(config.Value.Key);
+            var key = Encoding.UTF8.GetBytes(_config.Value.Key);
 
             var claims = new List<Claim>
             {
@@ -27,9 +32,9 @@ namespace Identity.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(TimeSpan.FromHours(config.Value.Duration)),
-                Issuer = config.Value.Issuer,
-                Audience = config.Value.Audience,
+                Expires = DateTime.UtcNow.Add(TimeSpan.FromMinutes(_config.Value.Duration)),
+                Issuer = _config.Value.Issuer,
+                Audience = _config.Value.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token =  tokenHandler.CreateToken(tokenDescriptor);
