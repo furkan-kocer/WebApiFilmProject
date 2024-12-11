@@ -3,8 +3,7 @@
     public class TokenGenerationResponse
     {
         public string Token { get; set; }
-        public DateTime TokenExpireDate { get; set; }
-        public string Email { get; set; }
-        public string UserId { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

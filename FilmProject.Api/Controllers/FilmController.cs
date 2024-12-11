@@ -20,7 +20,6 @@ namespace FilmProject.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllFilms()
         {
-            //throw new Exception("Exception error occured.");
             Log.Logger.ForContext("EventId", 1001).Verbose("Get method called with the name of {methodName}", nameof(GetAllFilms));
             var films = await _filmService.GetAllFilmsAsync();
             if (films.result == false)

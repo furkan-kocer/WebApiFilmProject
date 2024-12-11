@@ -1,4 +1,5 @@
 ﻿using FilmProject.DataAccess.Entities;
+using FilmProject.DataAccess.Helpers;
 using Mapster;
 using MongoDB.Driver;
 namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
@@ -11,29 +12,17 @@ namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
             _dbService = dbService;
         }
 
-        public async Task<List<string>> CheckUserExist(User user)
+        public async Task<List<User>> CheckUserExist(User user)
         {
-            var conflictingUsers = await _dbService._userCollection.Find
+            var getMatchedUsers = await _dbService._userCollection.Find
                 (u => u.Email == user.Email ||
                 (string.IsNullOrEmpty(user.PhoneNumber) ? false : u.PhoneNumber == user.PhoneNumber))
                 .ToListAsync();
-            // Analyze conflicts and collect conflict types
-            var conflicts = new List<string>();
-            if (conflictingUsers.Any())
-            {
-                string emailExist = "Email already exist.";
-                string phoneExist = "PhoneNumber already exist.";
-                foreach (var users in conflictingUsers)
-                {
-                    if (users.Email == user.Email && !(conflicts.Contains(emailExist)))
-                        conflicts.Add(emailExist);
-                    if (users.PhoneNumber == user.PhoneNumber && !(string.IsNullOrEmpty(user.PhoneNumber)) && !(conflicts.Contains(phoneExist)))
-                        conflicts.Add(phoneExist);
-                    if (conflicts.Contains(emailExist) && conflicts.Contains(phoneExist))
-                        break;
-                }
-            }
-            return conflicts;
+            return getMatchedUsers;
+        }
+        public List<string> CheckHasConflicts(List<User> conflictingUsers, User user)
+        {
+            return UserRepositoryHelper.AnalyzeConflicts(conflictingUsers, user);
         }
 
         public async Task<bool> IsLoginInputMatch(string field, User user)
@@ -61,6 +50,33 @@ namespace FilmProject.DataAccess.CollectionRepositories.UserCollection
         public async Task RegisterUserAsync(User user)
         {
             await _dbService._userCollection.InsertOneAsync(user);
+        }
+
+        public async Task<bool> UpdateRefreshTokenAsync(string refreshToken, DateTime refreshTokenExpiryTime, User user)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
+            var update = Builders<User>.Update.Set(u => u.RefreshToken, refreshToken)
+                                              .Set(u => u.RefreshTokenExpiryTime, refreshTokenExpiryTime);
+            var result = await _dbService._userCollection.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+        public async Task UpdateRefreshTokenValueAsync(string refreshToken, User user)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
+            var update = Builders<User>.Update.Set(u => u.RefreshToken, refreshToken);
+            await _dbService._userCollection.UpdateOneAsync(filter, update);
+        }
+
+        public async Task<bool> CheckRefreshTokenValid(string refreshToken)
+        {
+            var isTokenAvaliable = await _dbService._userCollection.Find(u => u.RefreshToken == refreshToken).AnyAsync();
+            return isTokenAvaliable;
+        }
+
+        public async Task<User> GetUserByRefreshToken(string refreshToken)
+        {
+            var user = await _dbService._userCollection.Find(u => u.RefreshToken == refreshToken).FirstOrDefaultAsync();
+            return user;
         }
     }
 }

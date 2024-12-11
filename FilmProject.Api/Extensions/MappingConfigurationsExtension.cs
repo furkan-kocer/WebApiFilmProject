@@ -1,4 +1,5 @@
-﻿using FilmProject.Contracts.DataTransferObjects.User;
+﻿using FilmProject.Contracts.DataTransferObjects.Token;
+using FilmProject.Contracts.DataTransferObjects.User;
 using FilmProject.DataAccess.Entities;
 using Mapster;
 
@@ -17,6 +18,11 @@ namespace FilmProject.Api.Extensions
                 .Map(dest => dest.userID, src => src.Id)
                 .Map(dest => dest.email, src => src.Email)
                 .Map(dest => dest.phoneNumber, src => src.PhoneNumber);
+            TypeAdapterConfig<User, NewTokensRequest>
+              .NewConfig()
+              .Map(dest => dest.userID, src => src.Id)
+              .Map(dest => dest.email, src => src.Email)
+              .Map(dest => dest.phoneNumber, src => src.PhoneNumber);
             return services;
         }
     }

@@ -15,5 +15,11 @@ namespace FilmProject.DataAccess.Entities
         [BsonElement("filmCode")]
         [JsonPropertyName("filmCode")]
         public string FilmCode { get; set; }
+        [BsonElement("filmDescription")]
+        [JsonPropertyName("filmDescription")]
+        public string FilmDescription { get; set; }
+        [BsonElement("imgUrl")]
+        [JsonPropertyName("imgUrl")]
+        public string ImgUrl { get; set; }
     }
 }

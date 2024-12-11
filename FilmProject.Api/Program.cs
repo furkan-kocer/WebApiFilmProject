@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure the mongoDBSettings
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
-builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("IdentityApiRequest"));
+builder.Services.Configure<ExternalApiSettings>(builder.Configuration.GetSection("ExternalApiSettings"));
 //Configure the JwtSettings
 var jwtSection = builder.Configuration.GetSection("JwtSettings");
 var jwtSettings = jwtSection.Get<JWTSettings>();

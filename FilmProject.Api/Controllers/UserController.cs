@@ -1,4 +1,5 @@
 ﻿using FilmProject.Contracts.Abstractions.Businesses.UserServiceAbs;
+using FilmProject.Contracts.DataTransferObjects.Token;
 using FilmProject.Contracts.DataTransferObjects.User;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,16 @@ namespace FilmProject.Api.Controllers
                 return BadRequest(loginResponse);
             }
             return Ok(loginResponse);
+        }
+        [HttpPost]  
+        public async Task<IActionResult> RefreshToken(TokenRequest tokenRequest)
+        {
+            var refresTokenResponse = await _userService.GenerateNewTokens(tokenRequest);
+            if (!refresTokenResponse.result)
+            {
+                return BadRequest(refresTokenResponse);
+            }
+            return Ok(refresTokenResponse);
         }
     }
 }

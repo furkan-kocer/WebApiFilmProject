@@ -15,5 +15,7 @@
         public string? IdentityNumber { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
         public Roles Role { get; set; } = Roles.User;
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

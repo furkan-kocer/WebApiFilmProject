@@ -1,4 +1,4 @@
-﻿namespace FilmProject.Services.Businesses.ExternalApi
+﻿namespace Identity.Services.ExternalApi
 {
     public class ExternalApiSettings
     {
